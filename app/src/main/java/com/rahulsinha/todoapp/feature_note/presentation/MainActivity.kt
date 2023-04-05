@@ -1,4 +1,4 @@
-package com.rahulsinha.todoapp
+package com.rahulsinha.todoapp.feature_note.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
