@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.rahulsinha.todoapp.feature_note.presentation.notes.components.NoteItem
 import com.rahulsinha.todoapp.feature_note.presentation.notes.components.OrderSection
+import com.rahulsinha.todoapp.feature_note.presentation.util.Screen
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -30,11 +31,12 @@ fun NotesScreen(
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(Screen.AddEditNoteScreen.route)
                 },
                 backgroundColor = MaterialTheme.colors.primary
             ) {
@@ -66,7 +68,7 @@ fun NotesScreen(
                     )
                 }
             }
-            
+
             AnimatedVisibility(
                 visible = state.isOrderSectionVisible,
                 enter = fadeIn() + slideInVertically(),
@@ -82,16 +84,20 @@ fun NotesScreen(
                     }
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(state.notes) {note ->
+                items(state.notes) { note ->
                     NoteItem(
                         note = note,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { },
+                            .clickable {
+                                navController.navigate(
+                                    Screen.AddEditNoteScreen.route + "?noteId=${note.id}&noteColor=${note.color}"
+                                )
+                            },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
                             scope.launch {
